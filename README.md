@@ -52,25 +52,33 @@ python scripts/00_download_data.py       # fetch the ~2.1GB CSV (once)
 python scripts/01_build_database.py      # build db/obfcm.duckdb (~1min)
 python scripts/02_model_country_effects.py PT   # country effects vs. Portugal
 python scripts/02_model_country_effects.py EU   # country effects vs. EU/sample average
+python scripts/03_chart_country_effects.py      # renders docs/images/country_effects_*.png
 ```
 
 ## Current results (preview)
 
 Fixed-effects model, same vehicle family (`EEA_VFN`) across countries, ICEV + non-plug-in HEV,
 ≥3,000 km lifetime distance, real/WLTP ratio in [0.7, 2], standard errors clustered by vehicle
-family. Coefficients read as: *"same car, X% more/less real-world fuel consumption than in
-Portugal"* (negative = more economical than Portugal).
+family. Coefficients read as % more/less real-world fuel consumption than the reference, for
+the same car.
 
-| Most economical vs. PT | | Least economical vs. PT | |
-|---|---:|---|---:|
-| Finland | −11.0% | Malta | +15.9% |
-| Sweden | −9.5% | Romania | +4.3% |
-| Norway | −9.5% | Greece | +2.8% |
-| Denmark | −6.8% | Bulgaria | +1.4% |
-| Netherlands | −6.6% | Croatia | +0.7% |
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/images/country_effects_dark.png">
+  <img alt="Diverging bar chart of real-world vs. official fuel consumption by country, ranked from Finland (-8.4%) to Malta (+19.3%), deviation from the EU/EEA sample average for the same vehicle model" src="docs/images/country_effects_light.png">
+</picture>
 
-Full ranking: [db/country_effects_ref_PT.csv](db/country_effects_ref_PT.csv). Model summary,
-sample sizes, and interpretation caveats: [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
+Referenced against the **EU/EEA sample average** (unweighted across countries): Finland,
+Sweden and Norway are the most economical relative to the same car elsewhere (−7 to −8%);
+Malta, Romania and Greece the least (+6 to +19%). **Portugal sits at +3.0%**, i.e. slightly
+*less* economical than the cross-country average for the same car — modestly undercutting the
+"Portuguese drivers are wasteful" framing behind the original motivation, though see the
+caveats below before reading too much into the ranking's middle.
+
+Also available referenced directly against Portugal
+([db/country_effects_ref_PT.csv](db/country_effects_ref_PT.csv)) — useful while validating the
+pipeline, since every coefficient there reads as "% vs. Portugal" directly. Full EU-average
+ranking: [db/country_effects_ref_EU.csv](db/country_effects_ref_EU.csv). Model summary, sample
+sizes, and interpretation caveats: [docs/METHODOLOGY.md](docs/METHODOLOGY.md).
 
 **This is phase 1 (fixed-effects country ranking) — it identifies *that* a gap exists, not
 *why*.** The country effect still mixes actual driving style with road type, congestion, speed
