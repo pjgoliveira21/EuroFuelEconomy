@@ -36,8 +36,9 @@ reasoning, data caveats, and model specification.
 ```
 dataset/    raw data (gitignored, fetched by scripts/00_download_data.py)
 db/         local DuckDB database (gitignored) + exported result CSVs (tracked)
-scripts/    pipeline: download -> build database -> model
+scripts/    pipeline: download -> build database -> model -> chart
 docs/       methodology, data dictionary notes
+app/        Streamlit app to browse the country ranking interactively
 ```
 
 The database (`db/obfcm.duckdb`) is the boundary between the data pipeline and any application
@@ -54,6 +55,18 @@ python scripts/02_model_country_effects.py PT   # country effects vs. Portugal
 python scripts/02_model_country_effects.py EU   # country effects vs. EU/sample average
 python scripts/03_chart_country_effects.py      # renders docs/images/country_effects_*.png
 ```
+
+## Interactive app
+
+```bash
+pip install -r app/requirements.txt
+streamlit run app/app.py
+```
+
+Browse the country ranking, switch between the Portugal and EU-average reference, and hover
+bars for exact percentages and confidence intervals. It only reads the small exported tables
+in `db/*.csv` (see [Repo structure](#repo-structure)) — no need to build the full database
+just to run it.
 
 ## Current results (preview)
 

@@ -30,6 +30,10 @@ update this file instead of trusting it blindly.
 ## Status
 
 Phase 1 (fixed-effects country ranking) implemented and run with Portugal as reference
-(`db/country_effects_ref_PT.csv`); EU-average reference also supported. Phase 2 (explaining
+(`db/country_effects_ref_PT.csv`); EU-average reference also supported
+(`db/country_effects_ref_EU.csv`, sum-to-zero coding — note Slovakia is the implicit dropped
+baseline in that file and won't appear as its own row). A static chart
+(`scripts/03_chart_country_effects.py`) and a Streamlit app (`app/app.py`) both read from
+these result CSVs only, never the raw CSV or `vehicles_model` directly. Phase 2 (explaining
 country effects with structural covariates) and Spritmonitor cross-validation are not started —
 see README's roadmap section.
